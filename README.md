@@ -21,3 +21,7 @@ How to install:
 4. Turn on developer mode if not already turned on.
 5. Click Load unpacked button.
 6. Browse to unpacked downloaded repository folder.
+
+<img width="1280" height="800" alt="1" src="https://github.com/user-attachments/assets/029057d1-14d3-403a-90ec-10e1eca81f83" />
+<img width="1280" height="305" alt="2 1" src="https://github.com/user-attachments/assets/fd543fab-b3e1-47fd-869e-9dbaa429a863" />
+<img width="284" height="252" alt="3 1" src="https://github.com/user-attachments/assets/277b33fd-b7c3-4aa5-9c88-f9190d78a0d2" />
