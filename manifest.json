@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "F95 Zone - Game notes Add-on",
+  "version": "1.0",
+  "description": "Adds a note box to game tiles on a website visable only to you.",
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Game Notes Manager"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://f95zone.to/sam/latest_alpha/*",
+        "https://f95zone.to/threads/*"
+      ],
+      "css": ["styles.css"],
+      "js": ["content.js"]
+    }
+  ]
+}

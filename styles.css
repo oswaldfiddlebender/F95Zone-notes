@@ -1,0 +1,227 @@
+/* Game tile wrapper to ensure proper stacking */
+.game-tile-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+/* Game page note section - styled to fit F95Zone theme */
+.game-note-section {
+    margin-bottom: 16px;
+    background: #2a2a2a;
+    border: 1px solid #404040;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.game-note-header {
+    padding: 12px 16px;
+    background: #333333;
+    border-bottom: 1px solid #404040;
+    border-radius: 8px 8px 0 0;
+}
+
+.game-note-header h3 {
+    margin: 0;
+    color: #e0e0e0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Note Section Styles - Dark Theme */
+.note-section {
+    margin-top: 8px;
+    background: #2a2a2a;
+    border: 1px solid #404040;
+    border-radius: 8px;
+    position: relative;
+}
+
+/* Empty state - just the add button */
+.note-empty {
+    padding: 8px;
+}
+
+.add-note-btn {
+    width: 100%;
+    padding: 10px;
+    background: #404040;
+    color: #e0e0e0;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
+}
+
+.add-note-btn:hover {
+    background: #4a4a4a;
+    color: #ffffff;
+}
+
+/* Note display state */
+.note-display {
+    padding: 12px;
+}
+
+.note-text {
+    color: #e0e0e0;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    padding: 8px;
+    background: #333333;
+    border-radius: 4px;
+    border-left: 3px solid #007bff;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Note edit state */
+.note-edit {
+    padding: 12px;
+    display: none;
+}
+
+.note-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555555;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 80px;
+    box-sizing: border-box;
+    background: #333333;
+    color: #e0e0e0;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.note-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.note-input::placeholder {
+    color: #999999;
+    opacity: 1;
+}
+
+.note-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.save-note-btn, .cancel-note-btn, .edit-note-btn, .delete-note-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
+}
+
+.save-note-btn {
+    background: #28a745;
+    color: white;
+}
+
+.save-note-btn:hover {
+    background: #218838;
+}
+
+.cancel-note-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.cancel-note-btn:hover {
+    background: #545b62;
+}
+
+.edit-note-btn {
+    background: #007bff;
+    color: white;
+}
+
+.edit-note-btn:hover {
+    background: #0056b3;
+}
+
+.delete-note-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.delete-note-btn:hover {
+    background: #c82333;
+}
+
+/* Game page specific adjustments */
+.game-note-section .note-empty {
+    padding: 12px;
+}
+
+.game-note-section .add-note-btn {
+    padding: 12px;
+    font-size: 14px;
+}
+
+.game-note-section .note-input {
+    min-height: 100px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .note-section, .game-note-section {
+        margin-top: 6px;
+    }
+    
+    .note-display, .note-edit {
+        padding: 10px;
+    }
+    
+    .note-empty {
+        padding: 6px;
+    }
+    
+    .game-note-section .note-empty {
+        padding: 10px;
+    }
+    
+    .note-input {
+        min-height: 70px;
+        padding: 8px;
+        font-size: 13px;
+    }
+    
+    .game-note-section .note-input {
+        min-height: 80px;
+    }
+    
+    .note-buttons {
+        margin-top: 8px;
+    }
+    
+    .save-note-btn, .cancel-note-btn, .edit-note-btn, .delete-note-btn {
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+    
+    .add-note-btn {
+        padding: 8px;
+        font-size: 12px;
+    }
+    
+    .game-note-section .add-note-btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+}
