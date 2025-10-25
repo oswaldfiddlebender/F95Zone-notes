@@ -1,14 +1,24 @@
 {
   "manifest_version": 3,
   "name": "F95 Zone - Game notes Add-on",
-  "version": "1.0",
-  "description": "Adds a note box to game tiles on a website visable only to you.",
+  "version": "1.1",
+  "description": "Adds a note box to game tiles on a website visible only to you.",
   "permissions": [
     "storage"
   ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "oswald@gmail.com",
+      "strict_min_version": "109.0"
+    }
+  },
   "action": {
     "default_popup": "popup.html",
     "default_title": "Game Notes Manager"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
   },
   "content_scripts": [
     {

@@ -79,10 +79,27 @@
     word-wrap: break-word;
 }
 
+.note-footer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+}
+
+.note-version {
+    color: #999999;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
 /* Note edit state */
 .note-edit {
     padding: 12px;
     display: none;
+}
+
+.note-edit .note-buttons {
+    margin-top: 10px;
 }
 
 .note-input {
@@ -114,8 +131,8 @@
 .note-buttons {
     display: flex;
     gap: 8px;
-    margin-top: 10px;
     justify-content: flex-end;
+    margin-left: auto;
 }
 
 .save-note-btn, .cancel-note-btn, .edit-note-btn, .delete-note-btn {
@@ -223,5 +240,20 @@
     .game-note-section .add-note-btn {
         padding: 10px;
         font-size: 13px;
+    }
+    
+    .note-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .note-version {
+        font-size: 11px;
+    }
+    
+    .note-buttons {
+        width: 100%;
+        justify-content: flex-end;
     }
 }

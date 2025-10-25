@@ -29,13 +29,8 @@
             color: #999999;
         }
 
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
         .btn {
+            width: 100%;
             padding: 12px 16px;
             border: none;
             border-radius: 6px;
@@ -43,67 +38,21 @@
             font-weight: 500;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
             background: #007bff;
             color: white;
+            margin-bottom: 8px;
         }
 
-        .btn-primary:hover {
+        .btn:hover {
             background: #0056b3;
         }
 
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #545b62;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        .status-message {
-            margin-top: 12px;
-            padding: 8px;
-            border-radius: 4px;
+        .info {
             font-size: 12px;
+            color: #999999;
             text-align: center;
-            display: none;
-        }
-
-        .status-success {
-            background: rgba(40, 167, 69, 0.2);
-            border: 1px solid #28a745;
-            color: #28a745;
-        }
-
-        .status-error {
-            background: rgba(220, 53, 69, 0.2);
-            border: 1px solid #dc3545;
-            color: #dc3545;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .icon {
-            width: 16px;
-            height: 16px;
+            margin-top: 12px;
+            line-height: 1.4;
         }
     </style>
 </head>
@@ -113,23 +62,11 @@
         <p>Manage your saved notes</p>
     </div>
 
-    <div class="button-group">
-        <button class="btn btn-primary" id="exportBtn">
-            📤 Export Data
-        </button>
-        
-        <button class="btn btn-secondary" id="importBtn">
-            📥 Import Data
-        </button>
-        
-        <button class="btn btn-danger" id="clearBtn">
-            🗑️ Clear All Data
-        </button>
-    </div>
+    <button class="btn" id="openSettings">⚙️ Open Settings</button>
 
-    <input type="file" id="fileInput" class="file-input" accept=".json">
-    
-    <div class="status-message" id="statusMessage"></div>
+    <div class="info">
+        Export, import, and clear your notes from the settings page.
+    </div>
 
     <script src="popup.js"></script>
 </body>
