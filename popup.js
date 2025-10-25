@@ -49,13 +49,29 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const importData = JSON.parse(e.target.result);
                 
-                // Validate that it's note data (support both old 'comment_' and new 'note_' keys)
+                // Validate and convert note data
                 const validNotes = {};
                 Object.keys(importData).forEach(key => {
-                    if ((key.startsWith('note_') || key.startsWith('comment_')) && typeof importData[key] === 'string') {
-                        // Convert old comment_ keys to note_ keys
-                        const noteKey = key.startsWith('comment_') ? key.replace('comment_', 'note_') : key;
-                        validNotes[noteKey] = importData[key];
+                    // Convert old comment_ keys to note_ keys
+                    const noteKey = key.startsWith('comment_') ? key.replace('comment_', 'note_') : key;
+                    
+                    if ((key.startsWith('note_') || key.startsWith('comment_'))) {
+                        // Handle both old string format and new object format
+                        if (typeof importData[key] === 'string') {
+                            // Convert old string format to new object format
+                            validNotes[noteKey] = {
+                                text: importData[key],
+                                version: null,
+                                savedAt: new Date().toISOString()
+                            };
+                        } else if (typeof importData[key] === 'object' && importData[key] !== null) {
+                            // New object format - ensure it has the required fields
+                            validNotes[noteKey] = {
+                                text: importData[key].text || '',
+                                version: importData[key].version || null,
+                                savedAt: importData[key].savedAt || new Date().toISOString()
+                            };
+                        }
                     }
                 });
 

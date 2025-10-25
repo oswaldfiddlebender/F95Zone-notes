@@ -36,6 +36,30 @@ function initializeUpdatesPage() {
     setupMutationObserver(container);
 }
 
+function extractVersionFromTile(gameTile) {
+    // Look for version in the tile using the resource-tile_label-version class
+    const versionElement = gameTile.querySelector('.resource-tile_label-version');
+    if (versionElement) {
+        let version = versionElement.textContent.trim();
+        // Remove 'v' prefix if present
+        if (version.toLowerCase().startsWith('v')) {
+            version = version.substring(1);
+        }
+        return version;
+    }
+    return null;
+}
+
+function extractVersionFromGamePage() {
+    // Look for version in the game page using the <b>Version</b>: pattern
+    const bodyHTML = document.body.innerHTML;
+    const versionMatch = bodyHTML.match(/<b>Version<\/b>:\s*([^<]+)/i);
+    if (versionMatch && versionMatch[1]) {
+        return versionMatch[1].trim();
+    }
+    return null;
+}
+
 function initializeGamePage() {
     // Find the block container for game page
     const blockContainer = document.querySelector('.block-container.lbContainer');
@@ -98,13 +122,16 @@ function addGamePageNoteSection(blockContainer, threadId) {
         </div>
         <div class="note-display" id="note-display-${threadId}" style="display: none;">
             <div class="note-text" id="note-text-${threadId}"></div>
-            <div class="note-buttons">
-                <button class="edit-note-btn" data-thread-id="${threadId}">Edit</button>
-                <button class="delete-note-btn" data-thread-id="${threadId}">Delete</button>
+            <div class="note-footer">
+                <div class="note-version" id="note-version-${threadId}" style="display: none;"></div>
+                <div class="note-buttons">
+                    <button class="edit-note-btn" data-thread-id="${threadId}">Edit</button>
+                    <button class="delete-note-btn" data-thread-id="${threadId}">Delete</button>
+                </div>
             </div>
         </div>
         <div class="note-edit" id="note-edit-${threadId}">
-            <textarea class="note-input" id="note-input-${threadId}" placeholder="Add your personal note (visable only to you)..." rows="4"></textarea>
+            <textarea class="note-input" id="note-input-${threadId}" placeholder="Add your personal note (visible only to you)..." rows="4"></textarea>
             <div class="note-buttons">
                 <button class="save-note-btn" data-thread-id="${threadId}">Save</button>
                 <button class="cancel-note-btn" data-thread-id="${threadId}">Cancel</button>
@@ -119,7 +146,7 @@ function addGamePageNoteSection(blockContainer, threadId) {
     blockContainer.parentNode.insertBefore(noteSection, blockContainer);
 
     // Add event listeners
-    setupNoteEventListeners(noteSection, threadId);
+    setupNoteEventListeners(noteSection, threadId, 'game');
     
     // Load existing note
     loadNote(threadId);
@@ -188,13 +215,16 @@ function addNoteSection(gameTile) {
     noteSection.innerHTML = `
         <div class="note-display" id="note-display-${threadId}" style="display: none;">
             <div class="note-text" id="note-text-${threadId}"></div>
-            <div class="note-buttons">
-                <button class="edit-note-btn" data-thread-id="${threadId}">Edit</button>
-                <button class="delete-note-btn" data-thread-id="${threadId}">Delete</button>
+            <div class="note-footer">
+                <div class="note-version" id="note-version-${threadId}" style="display: none;"></div>
+                <div class="note-buttons">
+                    <button class="edit-note-btn" data-thread-id="${threadId}">Edit</button>
+                    <button class="delete-note-btn" data-thread-id="${threadId}">Delete</button>
+                </div>
             </div>
         </div>
         <div class="note-edit" id="note-edit-${threadId}">
-            <textarea class="note-input" id="note-input-${threadId}" placeholder="Add your personal note (visable only to you)..." rows="3"></textarea>
+            <textarea class="note-input" id="note-input-${threadId}" placeholder="Add your personal note (visible only to you)..." rows="3"></textarea>
             <div class="note-buttons">
                 <button class="save-note-btn" data-thread-id="${threadId}">Save</button>
                 <button class="cancel-note-btn" data-thread-id="${threadId}">Cancel</button>
@@ -209,13 +239,13 @@ function addNoteSection(gameTile) {
     wrapper.appendChild(noteSection);
 
     // Add event listeners
-    setupNoteEventListeners(noteSection, threadId);
+    setupNoteEventListeners(noteSection, threadId, 'tile', gameTile);
     
     // Load existing note
     loadNote(threadId);
 }
 
-function setupNoteEventListeners(noteSection, threadId) {
+function setupNoteEventListeners(noteSection, threadId, pageType, gameTile = null) {
     const addBtn = noteSection.querySelector('.add-note-btn');
     const editBtn = noteSection.querySelector('.edit-note-btn');
     const deleteBtn = noteSection.querySelector('.delete-note-btn');
@@ -244,7 +274,7 @@ function setupNoteEventListeners(noteSection, threadId) {
             // Remove the note from storage entirely
             chrome.storage.local.remove([`note_${threadId}`]);
             // Update the display
-            updateNoteDisplay(threadId, '');
+            updateNoteDisplay(threadId, '', null);
         }
     });
 
@@ -252,8 +282,17 @@ function setupNoteEventListeners(noteSection, threadId) {
     saveBtn.addEventListener('click', function(e) {
         e.preventDefault();
         const note = textarea.value.trim();
-        saveNote(threadId, note);
-        updateNoteDisplay(threadId, note);
+        let version = null;
+        
+        // Extract version based on page type
+        if (pageType === 'game') {
+            version = extractVersionFromGamePage();
+        } else if (pageType === 'tile' && gameTile) {
+            version = extractVersionFromTile(gameTile);
+        }
+        
+        saveNote(threadId, note, version);
+        updateNoteDisplay(threadId, note, version);
     });
 
     // Cancel edit
@@ -267,8 +306,17 @@ function setupNoteEventListeners(noteSection, threadId) {
         if (e.key === 'Enter' && e.ctrlKey) {
             e.preventDefault();
             const note = textarea.value.trim();
-            saveNote(threadId, note);
-            updateNoteDisplay(threadId, note);
+            let version = null;
+            
+            // Extract version based on page type
+            if (pageType === 'game') {
+                version = extractVersionFromGamePage();
+            } else if (pageType === 'tile' && gameTile) {
+                version = extractVersionFromTile(gameTile);
+            }
+            
+            saveNote(threadId, note, version);
+            updateNoteDisplay(threadId, note, version);
         }
         // Handle Escape to cancel
         if (e.key === 'Escape') {
@@ -292,16 +340,26 @@ function showEditMode(threadId) {
     setTimeout(() => textarea.focus(), 50);
 }
 
-function updateNoteDisplay(threadId, note) {
+function updateNoteDisplay(threadId, note, version) {
     const noteDisplay = document.getElementById(`note-display-${threadId}`);
     const noteEdit = document.getElementById(`note-edit-${threadId}`);
     const noteEmpty = document.getElementById(`note-empty-${threadId}`);
     const noteText = document.getElementById(`note-text-${threadId}`);
+    const noteVersion = document.getElementById(`note-version-${threadId}`);
 
     noteEdit.style.display = 'none';
 
     if (note) {
         noteText.textContent = note;
+        
+        // Display version if available
+        if (version && noteVersion) {
+            noteVersion.textContent = `Version: ${version}`;
+            noteVersion.style.display = 'block';
+        } else if (noteVersion) {
+            noteVersion.style.display = 'none';
+        }
+        
         noteDisplay.style.display = 'block';
         noteEmpty.style.display = 'none';
     } else {
@@ -310,26 +368,43 @@ function updateNoteDisplay(threadId, note) {
     }
 }
 
-function saveNote(threadId, note) {
+function saveNote(threadId, note, version) {
     if (note.trim() === '') {
         // If note is empty, remove the key entirely
         chrome.storage.local.remove([`note_${threadId}`]);
     } else {
-        // Save the note
+        // Save the note with version
+        const noteData = {
+            text: note,
+            version: version || null,
+            savedAt: new Date().toISOString()
+        };
+        
         chrome.storage.local.set({
-            [`note_${threadId}`]: note
+            [`note_${threadId}`]: noteData
         });
     }
 }
 
 function loadNote(threadId) {
     chrome.storage.local.get([`note_${threadId}`], function(result) {
-        const note = result[`note_${threadId}`] || '';
+        const noteData = result[`note_${threadId}`];
+        let note = '';
+        let version = null;
+        
+        // Handle both old string format and new object format
+        if (typeof noteData === 'string') {
+            note = noteData;
+        } else if (noteData && typeof noteData === 'object') {
+            note = noteData.text || '';
+            version = noteData.version || null;
+        }
+        
         const textarea = document.getElementById(`note-input-${threadId}`);
         if (textarea) {
             textarea.value = note;
         }
-        updateNoteDisplay(threadId, note);
+        updateNoteDisplay(threadId, note, version);
     });
 }
 
